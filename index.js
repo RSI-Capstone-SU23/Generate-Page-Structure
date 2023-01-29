@@ -26,10 +26,7 @@ const traverse = (node) => {
 	const child = [];
 	
 	for (childNode of children) {
-		child.push({
-			path: createTagPath(childNode),
-			child: traverse(childNode).child,
-		});
+		child.push(traverse(childNode));
 	}
 
 	return { path: createTagPath(node), child };
