@@ -15,32 +15,24 @@ const createTagPath = (node) => {
 };
 
 const traverse = (node) => {
-	const elementPath = [];
-
 	let { children } = node;
 	
 	// convert children to array
 	children = Array.from(children);
-
+	
 	// Filter children by ALLOW_TAG
 	children = children.filter((child) => ALLOW_TAG.includes(child.tagName.toLowerCase()));
 
-	if (children.length === 0) {
-		elementPath.push({
-			path: createTagPath(node),
-			child: []
-		})
-		return elementPath;
-	}
-
+	const child = [];
+	
 	for (childNode of children) {
-		elementPath.push({
-			path: createTagPath(node),
-			child: traverse(childNode)
+		child.push({
+			path: createTagPath(childNode),
+			child: traverse(childNode).child,
 		});
 	}
 
-	return elementPath;
+	return { path: createTagPath(node), child };
 };
 
 const getStructure = (root) => {
@@ -48,4 +40,4 @@ const getStructure = (root) => {
 	return structure;
 }
 
-console.log(getStructure(document.querySelector('#experience')));
+console.log(getStructure(document.querySelector('.timeline.other')));
