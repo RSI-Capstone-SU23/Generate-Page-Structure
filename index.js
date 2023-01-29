@@ -33,7 +33,31 @@ const traverse = (node) => {
 };
 
 const getStructure = (root) => {
-	const structure = traverse(root);
+	// Step 1: Traverse the DOM
+	let structure = traverse(root);
+
+	// Step 2: Remove duplicate path in child (keep the first one)
+	const removeDuplicate = (node) => {
+		const { child } = node;
+		const pathSet = new Set();
+		const newChild = [];
+
+		for (childNode of child) {
+			const { path } = childNode;
+			if (!pathSet.has(path)) {
+				pathSet.add(path);
+				newChild.push(childNode);
+			}
+		}
+
+		node.child = newChild;
+		
+		for (childNode of node.child) {
+			removeDuplicate(childNode);
+		}
+	};
+
+	removeDuplicate(structure);
 	return structure;
 }
 
