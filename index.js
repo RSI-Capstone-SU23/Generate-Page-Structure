@@ -6,7 +6,7 @@ const createTagPath = (node) => {
 	if (node.id) {
 		out += `#${node.id}`;
 	}
-	if (node.className) {
+	else if (node.className) {
 		const classStr = node.className.split(' ').join('.');
 		out += `.${classStr}`;
 	}
@@ -32,32 +32,34 @@ const traverse = (node) => {
 	return { path: createTagPath(node), child };
 };
 
+const removeDuplicate = (node) => {
+	const { child } = node;
+	const pathSet = new Set();
+	const newChild = [];
+
+	for (childNode of child) {
+		const { path } = childNode;
+		if (!pathSet.has(path)) {
+			pathSet.add(path);
+			newChild.push(childNode);
+		}
+	}
+
+	node.child = newChild;
+	
+	for (childNode of node.child) {
+		removeDuplicate(childNode);
+	}
+};
+
 const getStructure = (root) => {
 	// Step 1: Traverse the DOM
 	let structure = traverse(root);
 
 	// Step 2: Remove duplicate path in child (keep the first one)
-	const removeDuplicate = (node) => {
-		const { child } = node;
-		const pathSet = new Set();
-		const newChild = [];
-
-		for (childNode of child) {
-			const { path } = childNode;
-			if (!pathSet.has(path)) {
-				pathSet.add(path);
-				newChild.push(childNode);
-			}
-		}
-
-		node.child = newChild;
-		
-		for (childNode of node.child) {
-			removeDuplicate(childNode);
-		}
-	};
-
 	removeDuplicate(structure);
+
+	// Step 3: If node is 
 	return structure;
 }
 
