@@ -76,7 +76,7 @@ const getStructure = (root) => {
 	removeDuplicate(structure);
 
 	// Step 3: DFS and group leaf node
-	dfs(structure, structure.path);
+	dfs(structure);
 
 	return structure;
 }
