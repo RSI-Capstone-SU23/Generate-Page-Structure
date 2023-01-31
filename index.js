@@ -81,4 +81,6 @@ const getStructure = (root) => {
 	return structure;
 }
 
+// Example
+document.querySelectorAll('.timeline.other span.time').forEach((node) => node.remove());
 console.log(getStructure(document.querySelector('.timeline.other')));
