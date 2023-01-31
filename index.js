@@ -52,6 +52,22 @@ const removeDuplicate = (node) => {
 	}
 };
 
+// dfs structure, if node is leaf then group that node with its parent
+// newPath = parrentPath + " >> " + nodePath
+const dfs = (node, parent) => {
+	let { child } = node;
+
+	for (childNode of child) {
+		dfs(childNode, node);
+	}
+
+	if (child.length === 0 && parent && parent.child.length == 1) {
+		// leaf node
+		parent.path += ` >> ${node.path}`;
+		parent.child = [];
+	}
+};
+
 const getStructure = (root) => {
 	// Step 1: Traverse the DOM
 	let structure = traverse(root);
@@ -59,7 +75,9 @@ const getStructure = (root) => {
 	// Step 2: Remove duplicate path in child (keep the first one)
 	removeDuplicate(structure);
 
-	// Step 3: If node is 
+	// Step 3: DFS and group leaf node
+	dfs(structure, structure.path);
+
 	return structure;
 }
 
