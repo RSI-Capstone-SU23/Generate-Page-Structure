@@ -68,6 +68,15 @@ const dfs = (node, parent) => {
 	}
 };
 
+const addParrentToNode = (node) => {
+	const { child } = node;
+
+	for (childNode of child) {
+		childNode.parrent = node;
+		addParrentToNode(childNode);
+	}
+}
+
 const getStructure = (root) => {
 	// Step 1: Traverse the DOM
 	let structure = traverse(root);
@@ -75,8 +84,8 @@ const getStructure = (root) => {
 	// Step 2: Remove duplicate path in child (keep the first one)
 	removeDuplicate(structure);
 
-	// Step 3: DFS and group leaf node
-	dfs(structure);
+	// Step 3: Add parrent to each node
+	addParrentToNode(structure);
 
 	return structure;
 }
