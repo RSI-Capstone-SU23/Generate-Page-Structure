@@ -92,4 +92,19 @@ const getStructure = (root) => {
 
 // Example
 document.querySelectorAll('.timeline.other span.time').forEach((node) => node.remove());
-console.log(getStructure(document.querySelector('.timeline.other')));
+
+const structure = getStructure(document.querySelector('.timeline.other'));
+const printStructure = (node) => {
+	// Remove all parrent in each node of structure
+	const removeParrent = (node) => {
+		delete node.parrent;
+		for (child of node.child) {
+			removeParrent(child);
+		}
+	}
+
+	removeParrent(node);
+	console.log(node);
+};
+
+printStructure(structure);
