@@ -54,11 +54,11 @@ const removeDuplicate = (node) => {
 
 // dfs structure, if node is leaf then group that node with its parent
 // newPath = parrentPath + " >> " + nodePath
-const dfs = (node, parent) => {
-	let { child } = node;
+const dfs = (node) => {
+	let { child, parent } = node;
 
 	for (childNode of child) {
-		dfs(childNode, node);
+		dfs(childNode);
 	}
 
 	if (child.length === 0 && parent && parent.child.length == 1) {
@@ -68,12 +68,12 @@ const dfs = (node, parent) => {
 	}
 };
 
-const addParrentToNode = (node) => {
+const addParentToNode = (node) => {
 	const { child } = node;
 
 	for (childNode of child) {
-		childNode.parrent = node;
-		addParrentToNode(childNode);
+		childNode.parent = node;
+		addParentToNode(childNode);
 	}
 }
 
@@ -85,7 +85,10 @@ const getStructure = (root) => {
 	removeDuplicate(structure);
 
 	// Step 3: Add parrent to each node
-	addParrentToNode(structure);
+	addParentToNode(structure);
+
+	// Step 4: dfs structure, if node is leaf then group that node with its parent
+	dfs(structure);
 
 	return structure;
 }
@@ -96,14 +99,14 @@ document.querySelectorAll('.timeline.other span.time').forEach((node) => node.re
 const structure = getStructure(document.querySelector('.timeline.other'));
 const printStructure = (node) => {
 	// Remove all parrent in each node of structure
-	const removeParrent = (node) => {
-		delete node.parrent;
+	const removeParent = (node) => {
+		delete node.parent;
 		for (child of node.child) {
-			removeParrent(child);
+			removeParent(child);
 		}
 	}
 
-	removeParrent(node);
+	removeParent(node);
 	console.log(node);
 };
 
