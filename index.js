@@ -65,6 +65,8 @@ const dfs = (node) => {
 		// leaf node
 		parent.path += ` >> ${node.path}`;
 		parent.child = [];
+
+		dfs(parent)
 	}
 };
 
