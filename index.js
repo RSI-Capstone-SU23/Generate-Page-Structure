@@ -135,26 +135,33 @@ swalLink.href = 'https://unpkg.com/sweetalert/dist/sweetalert.css';
 document.head.appendChild(swalLink);
 
 // Add event listener to CONTAINER_TAG element
+let isOpen = false;
 for (const tag of CONTAINER_TAG) {
 	const elements = document.getElementsByTagName(tag);
 
 	for (const el of elements) {
 		el.addEventListener('click', (e) => {
-			e.stopPropagation();
-			const structure = getStructure(el);
-
-			// Swal alert
-			swal({
-				title: 'Structure',
-				text: structure,
-				icon: 'success',
-				button: 'Copy to clipboard',
-			}).then((value) => {
-				if (value) {
-					navigator.clipboard.writeText(structure);
-				}
-			});
-
+			console.log(isOpen)
+			if (!isOpen) {
+				e.stopPropagation();
+				const structure = getStructure(el);
+	
+				// Swal alert
+				isOpen = true;
+				console.log(isOpen)
+				swal({
+					title: 'Structure',
+					text: structure,
+					icon: 'success',
+					button: 'Copy to clipboard',
+				}).then((value) => {
+					if (value) {
+						navigator.clipboard.writeText(structure);
+					}
+					console.log("close")
+					isOpen = false;
+				});
+			}
 		});
 
 		// add hover event and add red border
