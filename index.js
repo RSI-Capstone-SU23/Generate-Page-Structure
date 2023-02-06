@@ -1,4 +1,5 @@
 const ALLOW_TAG = ['div', 'section', 'article', 'p', 'span', 'a', 'ul', 'li', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'caption', 'colgroup', 'col', 'label', 'header', 'footer', 'nav', 'main', 'aside', 'article', 'details', 'summary', 'head', 'body', 'html', 'address', 'blockquote', 'pre', 'code',];
+const CONTAINER_TAG = ['div', 'section', 'article', 'ul', 'ol', 'img', 'table', 'header', 'footer', 'nav', 'main', 'aside', 'article', 'details', 'summary', 'body', 'html', 'address', ];
 const INDENT_SIZE = 4;
 
 const createTagPath = (node) => {
@@ -108,24 +109,35 @@ const getStructure = (root) => {
 	output = output.trim();
 
 	return output;
+};
+
+// Add event listener to CONTAINER_TAG element
+for (const tag of CONTAINER_TAG) {
+	const elements = document.getElementsByTagName(tag);
+
+	for (const el of elements) {
+		el.addEventListener('click', (e) => {
+			e.stopPropagation();
+			const structure = getStructure(el);
+			
+			// copy to clipboard and overwrite
+			// navigator.clipboard.writeText(structure);
+			// // show alert
+			// alert('Copied to clipboard');
+
+			alert(structure);
+		});
+
+		// add hover event and add red border
+		// if unhover then remove border
+		el.addEventListener('mouseover', (e) => {
+			e.stopPropagation();
+			el.style.border = '1px solid red';
+		});
+
+		el.addEventListener('mouseout', (e) => {
+			e.stopPropagation();
+			el.style.border = '';
+		});
+	}
 }
-
-// Example
-document.querySelectorAll('.timeline.other span.time').forEach((node) => node.remove());
-
-const structure = getStructure(document.querySelector('.timeline.other'));
-// const printStructure = (node) => {
-// 	// Remove all parrent in each node of structure
-// 	const removeParent = (node) => {
-// 		delete node.parent;
-// 		for (child of node.child) {
-// 			removeParent(child);
-// 		}
-// 	}
-
-// 	removeParent(node);
-// 	console.log(node);
-// };
-// printStructure(structure);
-
-console.log(structure);
