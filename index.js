@@ -124,44 +124,21 @@ const getStructure = (root) => {
 	return output;
 };
 
-// Add swal lib to show alert by append new script tag, link tag
-const swalScript = document.createElement('script');
-swalScript.src = 'https://unpkg.com/sweetalert/dist/sweetalert.min.js';
-document.body.appendChild(swalScript);
-
-const swalLink = document.createElement('link');
-swalLink.rel = 'stylesheet';
-swalLink.href = 'https://unpkg.com/sweetalert/dist/sweetalert.css';
-document.head.appendChild(swalLink);
 
 // Add event listener to CONTAINER_TAG element
-let isOpen = false;
 for (const tag of CONTAINER_TAG) {
 	const elements = document.getElementsByTagName(tag);
 
 	for (const el of elements) {
 		el.addEventListener('click', (e) => {
-			console.log(isOpen)
-			if (!isOpen) {
-				e.stopPropagation();
-				const structure = getStructure(el);
-	
-				// Swal alert
-				isOpen = true;
-				console.log(isOpen)
-				swal({
-					title: 'Structure',
-					text: structure,
-					icon: 'success',
-					button: 'Copy to clipboard',
-				}).then((value) => {
-					if (value) {
-						navigator.clipboard.writeText(structure);
-					}
-					console.log("close")
-					isOpen = false;
-				});
-			}
+			e.stopPropagation();
+			const structure = getStructure(el);
+
+			navigator.clipboard.writeText(structure);
+			console.log('-----------------');
+			console.log(structure);
+
+			alert('Copied to clipboard, check console for more detail');
 		});
 
 		// add hover event and add red border
