@@ -1,0 +1,17 @@
+{
+    "path": "div.timeline.other.bg-dark.rounded.shadow-light.padding-30.overflow-hidden",
+    "child": [
+        {
+            "path": "div.spacer.d-md-none.d-lg-none",
+            "child": []
+        },
+        {
+            "path": "div.timeline-container.wow.fadeInUp >> div.content >> ul >> li",
+            "child": []
+        },
+        {
+            "path": "span.line",
+            "child": []
+        }
+    ]
+}

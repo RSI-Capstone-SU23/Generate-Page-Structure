@@ -1,4 +1,5 @@
 const ALLOW_TAG = ['div', 'section', 'article', 'p', 'span', 'a', 'ul', 'li', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'caption', 'colgroup', 'col', 'label', 'header', 'footer', 'nav', 'main', 'aside', 'article', 'details', 'summary', 'head', 'body', 'html', 'address', 'blockquote', 'pre', 'code',];
+const INDENT_SIZE = 4;
 
 const createTagPath = (node) => {
 	let out = node.tagName.toLowerCase();
@@ -79,6 +80,15 @@ const addParentToNode = (node) => {
 	}
 }
 
+let output = '';
+const convertToStr = (node, indent) => {
+	output += `\r\n${ indent }${ node.path}`;
+
+	for(const childEl of node.child) {
+		convertToStr(childEl, indent + ' '.repeat(INDENT_SIZE));
+	}
+}
+
 const getStructure = (root) => {
 	// Step 1: Traverse the DOM
 	let structure = traverse(root);
@@ -92,24 +102,30 @@ const getStructure = (root) => {
 	// Step 4: dfs structure, if node is leaf then group that node with its parent
 	dfs(structure);
 
-	return structure;
+	// Step 5: Convert to string
+	convertToStr(structure, '');
+
+	output = output.trim();
+
+	return output;
 }
 
 // Example
 document.querySelectorAll('.timeline.other span.time').forEach((node) => node.remove());
 
 const structure = getStructure(document.querySelector('.timeline.other'));
-const printStructure = (node) => {
-	// Remove all parrent in each node of structure
-	const removeParent = (node) => {
-		delete node.parent;
-		for (child of node.child) {
-			removeParent(child);
-		}
-	}
+// const printStructure = (node) => {
+// 	// Remove all parrent in each node of structure
+// 	const removeParent = (node) => {
+// 		delete node.parent;
+// 		for (child of node.child) {
+// 			removeParent(child);
+// 		}
+// 	}
 
-	removeParent(node);
-	console.log(node);
-};
+// 	removeParent(node);
+// 	console.log(node);
+// };
+// printStructure(structure);
 
-printStructure(structure);
+console.log(structure);
